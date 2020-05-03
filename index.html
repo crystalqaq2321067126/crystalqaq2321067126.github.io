@@ -182,7 +182,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-05-03 16:35:43 / 修改时间：16:44:49" itemprop="dateCreated datePublished" datetime="2020-05-03T16:35:43+08:00">2020-05-03</time>
+              <time title="创建时间：2020-05-03 16:35:43 / 修改时间：16:54:25" itemprop="dateCreated datePublished" datetime="2020-05-03T16:35:43+08:00">2020-05-03</time>
             </span>
 
           
@@ -196,17 +196,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <a id="more"></a>
-<p>“””<br>目的：从酷我音乐网站中获得歌曲<br>功能：输入歌手以及页数，得到xxx.mp3 的歌曲文件<br>“””</p>
-<p>#0.导入库</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br></pre></td></tr></table></figure>
-<p>#1.模仿浏览器请求头</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">"Cookie"</span>: <span class="string">"_ga=GA1.2.765925389.1587720590; _gid=GA1.2.1352547405.1587720590; _gat=1; Hm_lvt_cdb524f42f0ce19b169a8071123a4797=1587720589,1587795594; Hm_lpvt_cdb524f42f0ce19b169a8071123a4797=1587795594; kw_token=W5QVZITAVC"</span></span><br><span class="line">    ,</span><br><span class="line">    <span class="string">"User-Agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36"</span></span><br><span class="line">    ,</span><br><span class="line">    <span class="string">"csrf"</span>: <span class="string">"W5QVZITAVC"</span></span><br><span class="line">    ,</span><br><span class="line">    <span class="string">"Referer"</span>: <span class="string">"http://www.kuwo.cn/search/list?key=%E5%91%A8%E6%9D%B0%E4%BC%A6"</span></span><br><span class="line">&#125;   <span class="comment">#模仿浏览器请求头然后进行请求</span></span><br></pre></td></tr></table></figure>
-
-<p>#2.得到的歌曲编号和名字然后存储在相应文件夹中</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_music</span><span class="params">(rid,name)</span>:</span></span><br><span class="line">    url = <span class="string">"http://www.kuwo.cn/url?format=mp3&amp;rid=&#123;&#125;&amp;response=url&amp;type=convert_url3&amp;br=128kmp3&amp;from=web&amp;t=1587798886577&amp;reqId=7198e921-86c4-11ea-9d55-53ae6050eaad"</span>.format(rid)  <span class="comment">#替换歌曲编号</span></span><br><span class="line">    result = requests.get(url,headers=headers).json()</span><br><span class="line">    <span class="comment">#print(result)</span></span><br><span class="line">    music_url = result[<span class="string">"url"</span>]</span><br><span class="line">    music = requests.get(music_url)</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">"酷我音乐/邓紫棋/&#123;&#125;.mp3"</span>.format(name),<span class="string">"wb"</span>)<span class="keyword">as</span> file:      <span class="comment">#存储在在酷我文件夹中的邓紫棋文件夹中</span></span><br><span class="line">        print(<span class="string">"正在下载&#123;&#125;"</span>.format(name))</span><br><span class="line">        file.write(music.content)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">singer = input(<span class="string">"请输入歌手："</span>)</span><br><span class="line">number = int(input(<span class="string">"请输入页数："</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,number+<span class="number">1</span>):</span><br><span class="line">    url = <span class="string">"http://www.kuwo.cn/api/www/search/searchMusicBykeyWord?key=&#123;&#125;&amp;pn=&#123;&#125;&amp;rn=30&amp;reqId=e0c9da00-86bc-11ea-b8e3-af6517f9b6e6"</span>.format(singer,i)       <span class="comment">#输入的歌手和页数</span></span><br><span class="line">    <span class="comment">#print(url)</span></span><br><span class="line">    <span class="comment">#4.json的请求</span></span><br><span class="line">    response =  requests.get(url,headers=headers).json()          <span class="comment">#json  转化成pyhon能处理的字典</span></span><br><span class="line">    <span class="comment">#print(response.text)</span></span><br><span class="line">    data = response[<span class="string">"data"</span>][<span class="string">"list"</span>]  <span class="comment">#获取data中的list</span></span><br><span class="line">    <span class="comment">#print(data)</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> data:                  <span class="comment">#获取列表中的数据</span></span><br><span class="line">        <span class="comment">#print(x)</span></span><br><span class="line">        rid = x[<span class="string">"rid"</span>]              <span class="comment">#获取歌曲编号的rid</span></span><br><span class="line">        name = x[<span class="string">"name"</span>]            <span class="comment">#获取歌名</span></span><br><span class="line">        <span class="comment">#print(rid)</span></span><br><span class="line">        <span class="comment">#print(name)</span></span><br><span class="line">        get_music(rid,name)         <span class="comment">#调用get_music</span></span><br></pre></td></tr></table></figure>
+          <p>##
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/05/03/%E9%85%B7%E7%8B%97%E9%9F%B3%E4%B9%90%E7%88%AC%E5%8F%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -250,7 +248,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-05-03 16:32:24 / 修改时间：16:35:13" itemprop="dateCreated datePublished" datetime="2020-05-03T16:32:24+08:00">2020-05-03</time>
+              <time title="创建时间：2020-05-03 16:32:24 / 修改时间：16:54:56" itemprop="dateCreated datePublished" datetime="2020-05-03T16:32:24+08:00">2020-05-03</time>
             </span>
 
           
@@ -264,18 +262,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>“””<br>爬取百度图片<br>“””</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.support.ui <span class="keyword">import</span> WebDriverWait</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.support <span class="keyword">import</span> expected_conditions <span class="keyword">as</span> EC</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> parse</span><br><span class="line"><span class="keyword">import</span> random</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crawler</span><span class="params">(n,path)</span>:</span></span><br><span class="line">    exe_path = <span class="string">r"C:\Users\FD\Desktop\chromedriver.exe"</span></span><br><span class="line">    url = <span class="string">"https://image.baidu.com/search/index?tn=baiduimage&amp;ipn=r&amp;ct=201326592&amp;cl=2&amp;lm=-1&amp;st=-1&amp;sf=1&amp;fmq=&amp;pv=&amp;ic=0&amp;nc=1&amp;z=&amp;se=1&amp;showtab=0&amp;fb=0&amp;width=&amp;height=&amp;face=0&amp;istype=2&amp;ie=utf-8&amp;fm=index&amp;pos=history&amp;"</span></span><br><span class="line">    data = parse.urlencode(&#123;<span class="string">"word"</span>: input(<span class="string">"请输入关键字: "</span>)&#125;)</span><br><span class="line">    url = url + data</span><br><span class="line">    driver = webdriver.Chrome(executable_path=exe_path)</span><br><span class="line">    driver.get(url)</span><br></pre></td></tr></table></figure>
-
-<p>获取网页源码</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">1</span></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">      driver.execute_script(<span class="string">'window.scrollTo(0,document.body.scrollHeight)'</span>)</span><br><span class="line">      time.sleep(<span class="number">2</span>)</span><br><span class="line">  WebDriverWait(driver, <span class="number">20</span>).until(EC.presence_of_all_elements_located((By.XPATH, <span class="string">'//div[@id="imgid"]/div[last()]'</span>)))</span><br><span class="line">  url_page = driver.page_source</span><br></pre></td></tr></table></figure>
-
-<p> 解析源码</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">html = etree.HTML(url_page)</span><br><span class="line">imgurls = html.xpath(<span class="string">"//li[@class='imgitem']//a/img/@data-imgurl"</span>)</span><br></pre></td></tr></table></figure>
-<p>保存</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> imgurl <span class="keyword">in</span> imgurls:</span><br><span class="line">    res = requests.get(imgurl).content</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">r""</span>+path+<span class="string">"/"</span>+str(a)+<span class="string">".jpg"</span>,<span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(res)</span><br><span class="line">        a += <span class="number">1</span></span><br><span class="line">driver.close()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>  __name__ == <span class="string">'__main__'</span> :</span><br><span class="line"></span><br><span class="line">    path = input(<span class="string">"请输入储存位置："</span>)</span><br><span class="line">    n = int(input(<span class="string">"请输入爬取的滚动次数(一次大约30张图片)："</span>))</span><br><span class="line">    crawler(n,path)</span><br></pre></td></tr></table></figure>
+          <p>##
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/05/03/%E7%99%BE%E5%BA%A6%E5%9B%BE%E7%89%87%E7%88%AC%E5%8F%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
